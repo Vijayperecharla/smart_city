@@ -1,9 +1,11 @@
 # utils/feedback_handler.py
+import os
+os.environ["TRANSFORMERS_CACHE"] = "/tmp"
 
 from transformers import pipeline
 
 # Use a lightweight model (or replace with Granite API if available)
-summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6")
+summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
 
 CATEGORIES = {
     "garbage": "Sanitation Department",
