@@ -4,10 +4,29 @@ from utils.feedback_handler import handle_feedback
 from utils.doc_summarizer import summarize_document
 from utils.eco_advisor import eco_advice
 from utils.sensor_dashboard import get_city_metrics
+st.markdown("""
+<style>
+.main {
+    background-color: #f5f7fa;
+}
+h1, h2, h3 {
+    color: #2c3e50;
+}
+.stButton>button {
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 8px;
+    padding: 8px 16px;
+}
+</style>
+""", unsafe_allow_html=True)
 
 st.set_page_config(page_title="Smart City 360°", layout="wide")
 
-st.title("🏙️ Smart City 360° Assistant")
+st.title("Smart City 360° Assistant")
+st.caption("AI-powered urban management dashboard")
+
+st.divider()
 st.markdown("Use the tabs below to interact with various smart city modules.")
 
 # Tabs
