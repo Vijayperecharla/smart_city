@@ -1,9 +1,18 @@
 # utils/eco_advisor.py
 
-from transformers import pipeline
+def eco_advice(query):
+    if not query.strip():
+        return "Please enter a valid question."
 
-# You can replace this with Granite Q&A or Chat API if needed
-qa_pipeline = pipeline("text-generation", model="gpt2")
+    tips = [
+        "Use LED bulbs to save electricity.",
+        "Turn off appliances when not in use.",
+        "Reduce plastic usage and use reusable bags.",
+        "Use public transport or carpool.",
+        "Save water by fixing leaks and using efficiently."
+    ]
+
+    return "Here are some eco-friendly suggestions:\n\n- " + "\n- ".join(tips)
 
 ECO_KNOWLEDGE = """
 Here are some eco-friendly tips:
