@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 from utils.feedback_handler import handle_feedback
 from utils.doc_summarizer import summarize_document
 from utils.eco_advisor import eco_advice
