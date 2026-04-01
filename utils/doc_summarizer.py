@@ -38,7 +38,7 @@ def summarize_document(file):
         chunks = [text[i:i+1000] for i in range(0, len(text), 1000)]
         summaries = []
         for chunk in chunks:
-            summary = summarizer(chunk, max_length=100, min_length=30, do_sample=False)[0]["summary_text"]
+            summary = get_summarizer()(chunk, max_length=100, min_length=30, do_sample=False)[0]["summary_text"]
             summaries.append(summary)
 
         final_summary = "\n".join(summaries)
