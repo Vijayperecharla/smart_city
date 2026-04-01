@@ -7,8 +7,14 @@ from PyPDF2 import PdfReader
 os.environ["TRANSFORMERS_CACHE"] = "/tmp"
 
 # Initialize summarization model (replace with Granite later if needed)
-summarizer = pipeline("summarization", model="sshleifer/tiny-bart")
+summarizer = None
 
+def get_summarizer():
+    global summarizer
+    if summarizer is None:
+        from transformers import pipeline
+        summarizer = pipeline("summarization", model="sshleifer/tiny-bart")
+    return summarizer
 def extract_text_from_pdf(file_path):
     try:
         reader = PdfReader(file_path)
