@@ -1,48 +1,37 @@
-# utils/doc_summarizer.py
-
-import os
-import tempfile
-from transformers import pipeline
 from PyPDF2 import PdfReader
-os.environ["TRANSFORMERS_CACHE"] = "/tmp"
+import tempfile
+import os
 
-# Initialize summarization model (replace with Granite later if needed)
-summarizer = None
-
-def get_summarizer():
-    global summarizer
-    if summarizer is None:
-        from transformers import pipeline
-        summarizer = pipeline("summarization", model="sshleifer/tiny-bart")
-    return summarizer
 def extract_text_from_pdf(file_path):
-    try:
-        reader = PdfReader(file_path)
-        full_text = ""
-        for page in reader.pages:
-            full_text += page.extract_text() + "\n"
-        return full_text.strip()
-    except Exception as e:
-        return f"Error reading PDF: {e}"
+    text = ""
+    reader = PdfReader(file_path)
+    for page in reader.pages:
+        content = page.extract_text()
+        if content:
+            text += content
+    return text
+
+def summarize_text(text):
+    sentences = text.split(".")
+    summary = ".".join(sentences[:3])
+    return summary.strip()
 
 def summarize_document(file):
     try:
-        with tempfile.NamedTemporaryFile(delete=False) as tmp:
-            tmp.write(file.read())
-            tmp_path = tmp.name
+        if file.type == "application/pdf":
+            with tempfile.NamedTemporaryFile(delete=False) as tmp:
+                tmp.write(file.read())
+                tmp_path = tmp.name
 
-        text = extract_text_from_pdf(tmp_path)
-        if not text:
-            return "⚠️ Could not extract any text from the document."
+            text = extract_text_from_pdf(tmp_path)
+            os.remove(tmp_path)
+        else:
+            text = file.read().decode("utf-8")
 
-        chunks = [text[i:i+1000] for i in range(0, len(text), 1000)]
-        summaries = []
-        for chunk in chunks:
-            summary = get_summarizer()(chunk, max_length=100, min_length=30, do_sample=False)[0]["summary_text"]
-            summaries.append(summary)
+        if not text.strip():
+            return "No readable content found."
 
-        final_summary = "\n".join(summaries)
-        os.remove(tmp_path)
-        return f"📄 **Summary:**\n{final_summary}"
+        return summarize_text(text)
+
     except Exception as e:
-        return f"⚠️ Error summarizing document: {str(e)}"
+        return f"Error: {str(e)}"
