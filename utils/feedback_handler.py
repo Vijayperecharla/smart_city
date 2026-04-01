@@ -5,7 +5,14 @@ os.environ["TRANSFORMERS_CACHE"] = "/tmp"
 from transformers import pipeline
 
 # Use a lightweight model (or replace with Granite API if available)
-summarizer = pipeline("summarization", model="sshleifer/tiny-bart")
+summarizer = None
+
+def get_summarizer():
+    global summarizer
+    if summarizer is None:
+        from transformers import pipeline
+        summarizer = pipeline("summarization", model="sshleifer/tiny-bart")
+    return summarizer
 
 CATEGORIES = {
     "garbage": "Sanitation Department",
